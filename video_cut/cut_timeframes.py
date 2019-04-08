@@ -18,6 +18,7 @@ from .support import name_and_ext
 
 
 def cut_timeframes(in_path, timeframes, out_dir='./', out_pattern='{name}_{i}{ext}', ):
+    os.makedirs(out_dir, exist_ok=True)
     for (i, (start, end)) in enumerate(timeframes):
         try:
             name, ext = name_and_ext(in_path)
