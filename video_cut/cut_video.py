@@ -22,9 +22,9 @@ def get_audio_codec(input_path):
         return None
 
 
-def cut_video(in_path, out_path, start, end, ):
+def cut_video(in_path, out_path, start, end, encode=False):
     name, ext = name_and_ext(out_path)
-    if end - start > 4:
+    if end - start > 4 and not encode:
         with temporary_write('', path=f'_{name}{ext}') as temp_path:
             cmd = [
               "ffmpeg","-y",
