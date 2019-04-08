@@ -1,2 +1,3 @@
 .DS_*
 .rope*
+__pycache__*

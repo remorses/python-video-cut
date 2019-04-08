@@ -1,4 +1,3 @@
-
 from .support import name_and_ext, temporary_write, subprocess_call
 
 def get_video_duration(input_path):
@@ -55,10 +54,10 @@ def align_audio_video(in_path, out_path):
         return
     # if a_duration >= v_duration:
     name, ext = name_and_ext(in_path)
-    with temporary_write('', path='{name}_temp_audio{ext}') as path:
+    with temporary_write('', path=f'{name}_temp_audio{ext}') as path:
         start = a_duration - v_duration
-        path = extract_audio_subclip(in_path, path, start, a_duration)
-        out_path = merge_audio_video(path, in_path, out_path)
+        audio_path = extract_audio_subclip(in_path, path, start, a_duration)
+        out_path = merge_audio_video(audio_path, in_path, out_path)
         return out_path
 
 

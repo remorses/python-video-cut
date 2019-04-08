@@ -1,9 +1,7 @@
 import os.path
 import os
-from .concat_subclips import concat_subclips
-from .extract_subclip import cut
+from .cut_video import cut_video
 from .support import name_and_ext
-from functools import reduce
 
 
 
@@ -24,7 +22,7 @@ def cut_timeframes(in_path, timeframes, out_dir='./', out_pattern='{name}_{i}{ex
         try:
             name, ext = name_and_ext(in_path)
             out_path = os.path.join(out_dir, out_pattern.format(name=name, ext=ext, i=i))
-            out_path = cut(in_path, out_path, start, end)
+            out_path = cut_video(in_path, out_path, start, end)
             # os.remove(out_path)
             yield out_path
         except Exception as e:
