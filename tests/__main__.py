@@ -1,6 +1,6 @@
 from video_cut import cut_timeframes, concat_videos
 
-timeframes = [(0, 1), (2, 3), (1, 8)]
+timeframes = [(1, 7), (3, 4), (1, 8)]
 
 paths = cut_timeframes(
     'tests/video_.m2ts',
