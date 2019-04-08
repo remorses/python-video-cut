@@ -18,13 +18,23 @@ def get_audio_duration(input_path):
     except:
         return None
 
+def get_audio_codec(input_path):
+    cmd = f"ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 {input_path}"
+    data = subprocess_call([x.strip() for x in cmd.split(' ') if x.strip()])
+    data = [x for x in data.split('\n') if x.strip()][0].strip()
+    try:
+        return data
+    except:
+        return None
+
 def extract_audio_subclip(filename, targetname, start, end, ):
+    acodec = get_audio_codec(filename)
     cmd = [
       "ffmpeg","-y",
       "-i", filename,
       "-ss", "%0.3f" % (start),
       "-map","0:a",
-      "-c:a", "aac",
+      "-c:a", acodec,
       targetname
     ]
     subprocess_call(cmd)
@@ -38,8 +48,8 @@ def merge_audio_video(audio_path, video_path, out_path):
       # "-strict",
       # "-2",
       # "-vcodec", "copy", "-acodec", "copy",
-      "-map","0:a",
-      "-map","1:v",
+      "-map", "0:a",
+      "-map", "1:v",
       "-c", "copy",
       # "-crf", "18",
       out_path
