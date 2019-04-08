@@ -12,7 +12,7 @@ jobs:
            - image: cistuff/deploy-pypi
         steps:
              - checkout
-             - run: USERNAME=$PYPI_USERNAME PASSWORD=$PYPI_PASSWORD /deploy
+             - run: USERNAME=$PYPIUSERNAME PASSWORD=$PYPIPASSWORD /deploy
 
 
 
