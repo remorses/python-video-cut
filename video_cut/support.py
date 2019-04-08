@@ -9,7 +9,7 @@ def subprocess_call(cmd, verbose=True, errorprint=True):
                     "stderr": subprocess.PIPE,
                     "stdin": subprocess.DEVNULL}
     pretty_cmd = ' '.join(cmd)
-    print(f'executing {pretty_cmd}')
+    # print(f'executing {pretty_cmd}')
     proc = subprocess.Popen(cmd, **popen_params)
 
     out, err = proc.communicate()
