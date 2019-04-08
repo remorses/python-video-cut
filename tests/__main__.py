@@ -1,4 +1,4 @@
-from video_cut import cut_timeframes
+from video_cut import cut_timeframes, concat_videos
 
 timeframes = [(0, 4), (2, 5)]
 
@@ -9,4 +9,4 @@ paths = cut_timeframes(
     out_pattern='{name}_{i}{ext}',
 )
 
-print(list(paths))
+result = concat_videos(paths, 'result.mov')

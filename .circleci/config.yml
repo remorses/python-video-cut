@@ -1,0 +1,32 @@
+version: 2
+
+jobs:
+    bump:
+        docker:
+            - image: cistuff/bump
+        steps:
+            - checkout
+            - run: GITHUB_TOKEN=$GITHUB_TOKEN /bump
+    deploy:
+        docker:
+           - image: cistuff/deploy-pypi
+        steps:
+             - checkout
+             - run: USERNAME=$PYPI_USERNAME PASSWORD=$PYPI_PASSWORD /deploy
+
+
+
+workflows:
+     version: 2
+     workflow:
+          jobs:
+               - bump:
+                    filters:
+                        branches:
+                            only: deploy
+               - deploy:
+                    requires:
+                        - bump
+                    filters:
+                        branches:
+                            only: deploy
