@@ -17,7 +17,13 @@ from .support import name_and_ext
 #         return [*acc, timeframe, ]
 
 
-def cut_timeframes(in_path, timeframes, out_dir='./', out_pattern='{name}_{i}{ext}', ):
+def cut_timeframes(
+        in_path,
+        timeframes,
+        out_dir='./',
+        out_pattern='{name}_{i}{ext}',
+        on_exception= lambda e, t: print(f'exception while cutting {t}: {e}')
+    ):
     os.makedirs(out_dir, exist_ok=True)
     for (i, (start, end)) in enumerate(timeframes):
         try:
@@ -27,5 +33,5 @@ def cut_timeframes(in_path, timeframes, out_dir='./', out_pattern='{name}_{i}{ex
             # os.remove(out_path)
             yield out_path
         except Exception as e:
-            print(f'got exception {e}')
+            on_exception(e, (start, end))
             pass

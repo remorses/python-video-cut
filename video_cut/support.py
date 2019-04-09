@@ -2,13 +2,22 @@ import random
 import subprocess
 import os.path
 
+class FfmpegError(Exception):
+    def __init__(self, message, stdout=''):
+
+        # Call the base class constructor with the parameters it needs
+        super().__init__(f'{message}\n\n{stdout}\n\n')
+
+        # Now for your custom code...
+        self.stdout = stdout
+
 def subprocess_call(cmd, verbose=True, errorprint=True):
     """ Executes the given subprocess command."""
 
     popen_params = {"stdout": subprocess.PIPE,
                     "stderr": subprocess.PIPE,
                     "stdin": subprocess.DEVNULL}
-    pretty_cmd = ' '.join(cmd)
+    # pretty_cmd = ' '.join(cmd)
     # print(f'executing {pretty_cmd}')
     proc = subprocess.Popen(cmd, **popen_params)
 
@@ -17,7 +26,7 @@ def subprocess_call(cmd, verbose=True, errorprint=True):
     # proc.stderr.close()
 
     if proc.returncode:
-        raise Exception(err.decode('utf8'))
+        raise FfmpegError(err.decode('utf8'), out.decode('utf8'), )
 
     del proc
     return out.decode('utf8')
