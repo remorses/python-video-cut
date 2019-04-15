@@ -10,7 +10,7 @@ def get_video_codec(input_path):
     try:
         return data
     except:
-        return None
+        return 'libx264'
 
 def get_audio_codec(input_path):
     cmd = f"ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 {input_path}"
@@ -19,10 +19,10 @@ def get_audio_codec(input_path):
     try:
         return data
     except:
-        return None
+        return 'aac'
 
 
-def cut_video(in_path, out_path, start, end, encode=False):
+def cut_video(in_path, out_path, start, end, encode=False, acodec=None, vcodec=None,):
     name, ext = name_and_ext(out_path)
     if end - start > 4 and not encode:
         with temporary_write('', path=f'disaligned_temporary_{name}{ext}') as temp_path:
@@ -34,15 +34,15 @@ def cut_video(in_path, out_path, start, end, encode=False):
               "-map","0",
               "-c", "copy",
               "-shortest",
-              "-avoid_negative_ts", "1",
+              # "-avoid_negative_ts", "1",
               temp_path
             ]
             subprocess_call(cmd)
             out_path = align_audio_video(temp_path, out_path)
             return out_path
     else:
-        vcodec = get_video_codec(in_path)
-        acodec = get_audio_codec(in_path)
+        vcodec = vcodec or get_video_codec(in_path)
+        acodec = acodec or get_audio_codec(in_path)
         cmd = [
           "ffmpeg","-y",
           "-i", in_path,
@@ -53,7 +53,7 @@ def cut_video(in_path, out_path, start, end, encode=False):
           "-c:a", acodec,
           "-shortest",
           "-crf", "18",
-          "-avoid_negative_ts", "1",
+          # "-avoid_negative_ts", "1",
           out_path
         ]
         subprocess_call(cmd)

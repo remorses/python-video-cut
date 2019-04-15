@@ -22,14 +22,17 @@ def cut_timeframes(
         timeframes,
         out_dir='./',
         out_pattern='{name}_{i}{ext}',
-        on_exception= lambda e, t: print(f'exception while cutting {t}: {e}')
+        on_exception= lambda e, t: print(f'exception while cutting {t}: {e}'),
+        encode=False, 
+        acodec=None, 
+        vcodec=None,
     ):
     os.makedirs(out_dir, exist_ok=True)
     for (i, (start, end)) in enumerate(timeframes):
         try:
             name, ext = name_and_ext(in_path)
             out_path = os.path.join(out_dir, out_pattern.format(name=name, ext=ext, i=i))
-            out_path = cut_video(in_path, out_path, start, end)
+            out_path = cut_video(in_path, out_path, start, end, encode=encode, acodec=acodec, vcodec=vcodec)
             # os.remove(out_path)
             yield out_path
         except Exception as e:
