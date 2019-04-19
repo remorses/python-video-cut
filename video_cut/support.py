@@ -2,11 +2,50 @@ import random
 import subprocess
 import os.path
 
+
+def get_video_duration(input_path):
+    cmd = f"ffprobe -v error -select_streams v:0 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1 {input_path}"
+    data = subprocess_call([x.strip() for x in cmd.split(' ') if x.strip()])
+    data = [x for x in data.split('\n') if x.strip()][0].strip()
+    try:
+        return float(data)
+    except:
+        return 0
+
+def get_audio_duration(input_path):
+    cmd = f"ffprobe -v error -select_streams a:0 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1 {input_path}"
+    data = subprocess_call([x.strip() for x in cmd.split(' ') if x.strip()])
+    data = [x for x in data.split('\n') if x.strip()][0].strip()
+    try:
+        return float(data)
+    except:
+        return 0
+
+
+def get_video_codec(input_path):
+    cmd = f"ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 {input_path}"
+    data = subprocess_call([x.strip() for x in cmd.split(' ') if x.strip()])
+    data = [x for x in data.split('\n') if x.strip()][0].strip()
+    try:
+        return data
+    except:
+        return 'libx264'
+
+def get_audio_codec(input_path):
+    cmd = f"ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 {input_path}"
+    data = subprocess_call([x.strip() for x in cmd.split(' ') if x.strip()])
+    data = [x for x in data.split('\n') if x.strip()][0].strip()
+    try:
+        return data
+    except:
+        return 'aac'
+
+        
 class FfmpegError(Exception):
     def __init__(self, message, stdout=''):
 
         # Call the base class constructor with the parameters it needs
-        super().__init__(f'{message}\n\n{stdout}\n\n')
+        super().__init__(f'{message}\n{stdout}\n')
 
         # Now for your custom code...
         self.stdout = stdout
